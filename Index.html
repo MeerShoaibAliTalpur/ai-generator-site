@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Quote & Caption Generator</title>
+<style>
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+.box {
+  max-width: 500px;
+  margin: auto;
+  background: #111827;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+input, button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: none;
+}
+button {
+  background: #22c55e;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover {
+  background: #16a34a;
+}
+#result {
+  margin-top: 20px;
+  font-size: 20px;
+}
+.copy {
+  background: #3b82f6;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<h1>AI Quote & Caption Generator</h1>
+<div class="box">
+  <input type="text" id="topic" placeholder="Enter topic (love, life, success, money)">
+  <button onclick="generate()">Generate</button>
+  <div id="result"></div>
+  <button class="copy" onclick="copyText()">Copy Text</button>
+</div>
+
+<script>
+const data = {
+  love: [
+    "Love is not perfect, but it is real.",
+    "True love begins when expectations end.",
+    "Love makes ordinary moments extraordinary."
+  ],
+  life: [
+    "Life is hard, but you are harder.",
+    "Every day is a new chance.",
+    "Life rewards those who never quit."
+  ],
+  success: [
+    "Success is built on discipline, not luck.",
+    "Dream big, work harder.",
+    "Success comes to those who stay consistent."
+  ],
+  money: [
+    "Money follows skills, not wishes.",
+    "Build value, money will follow.",
+    "Financial freedom starts with mindset."
+  ]
+};
+
+function generate() {
+  let topic = document.getElementById("topic").value.toLowerCase();
+  let arr = data[topic] || ["Stay focused. Stay strong. Never quit."];
+  let text = arr[Math.floor(Math.random() * arr.length)];
+  document.getElementById("result").innerText = text;
+}
+
+function copyText() {
+  let text = document.getElementById("result").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
+}
+</script>
+
+</body>
+</html>
