@@ -2,14 +2,16 @@
 <html>
 <head>
 <title>Smart Quote & Caption Generator</title>
+
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #020617, #020617);
+  background: #020617;
   color: white;
   text-align: center;
   padding: 40px;
 }
+
 .container {
   max-width: 600px;
   margin: auto;
@@ -18,28 +20,23 @@ body {
   border-radius: 16px;
   box-shadow: 0 0 30px rgba(0,0,0,0.6);
 }
-h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
-}
+
 .buttons button {
   margin: 6px;
   padding: 10px 18px;
   border-radius: 20px;
   border: none;
   background: #22c55e;
-  color: black;
   font-weight: bold;
   cursor: pointer;
 }
-.buttons button:hover {
-  background: #16a34a;
-}
+
 #quote {
   margin-top: 20px;
   font-size: 20px;
   min-height: 60px;
 }
+
 .action-btn {
   margin-top: 12px;
   padding: 10px 16px;
@@ -49,19 +46,19 @@ h1 {
   color: white;
   cursor: pointer;
 }
+
 canvas {
   margin-top: 20px;
   background: white;
   border-radius: 12px;
-  padding: 10px;
-}<canvas id="canvas" width="500" height="500"></canvas>
+}
 </style>
 </head>
+
 <body>
 
 <div class="container">
   <h1>AI Quote & Caption Generator</h1>
-  <p>Create quotes & designs for Instagram and Redbubble</p>
 
   <div class="buttons">
     <button onclick="gen('motivation')">Motivation</button>
@@ -69,11 +66,13 @@ canvas {
     <button onclick="gen('life')">Life</button>
     <button onclick="gen('success')">Success</button>
     <button onclick="gen('urdu')">Urdu</button>
-  </div> <button onclick="gen('funny')">Funny</button>
-<button onclick="gen('business')">Business</button>
-<button onclick="gen('friendship')">Friendship</button>
+    <button onclick="gen('funny')">Funny</button>
+    <button onclick="gen('business')">Business</button>
+    <button onclick="gen('friendship')">Friendship</button>
+  </div>
 
   <div id="quote">Click a category 👆</div>
+
   <button class="action-btn" onclick="copyQuote()">Copy Text</button>
   <button class="action-btn" onclick="drawImage()">Generate Design</button>
   <button class="action-btn" onclick="downloadImage()">Download Image</button>
@@ -89,49 +88,32 @@ const quotes = {
     "Dream big, act bigger."
   ],
   love: [
-    "Love is not perfect, but it is real.",
-    "True love starts when ego ends.",
-    "Love makes ordinary moments special."
+    "Love is not perfect, but it is real."
   ],
   life: [
-    "Life is tough, but so are you.",
-    "Every day is a new beginning.",
-    "Life teaches lessons no book can."
+    "Life is tough, but so are you."
   ],
   success: [
-    "Success is built, not gifted.",
-    "Consistency creates success.",
-    "Small steps lead to big wins."
+    "Consistency creates success."
   ],
   urdu: [
-    "خاموش محنت سب سے بڑی طاقت ہے۔",
-    "جو صبر کرتا ہے وہی جیتتا ہے۔",
     "حوصلہ ہی کامیابی کی پہچان ہے۔"
+  ],
+  funny: [
+    "Life is too short for boring quotes."
+  ],
+  business: [
+    "Work smarter, not harder."
+  ],
+  friendship: [
+    "Friends are the family we choose."
   ]
-{funny: [
-  "Laughter is free therapy.",
-  "Life is too short for boring quotes.",
-  "Smile today, not tomorrow.",
-  "Funny quotes make your day!"
-],
-business: [
-  "Value creates revenue.",
-  "Plan, execute, succeed.",
-  "Work smarter, not harder.",
-  "Business is patience + action."
-],
-friendship: [
-  "Friends are the family we choose.",
-  "A true friend is a treasure.",
-  "Good friends make life beautiful."}
-]
-
 };
 
 let currentQuote = "";
 
 function gen(type) {
-  let arr = quotes[type];
+  const arr = quotes[type];
   currentQuote = arr[Math.floor(Math.random() * arr.length)];
   document.getElementById("quote").innerText = currentQuote;
 }
@@ -144,90 +126,39 @@ function copyQuote() {
 
 function drawImage() {
   if (!currentQuote) return alert("Generate a quote first!");
-  let c = document.getElementById("canvas");
-  let ctx = c.getContext("2d");
-  ctx.fillStyle = "#ffffff";
+  const c = document.getElementById("canvas");
+  const ctx = c.getContext("2d");
+  ctx.fillStyle = "#fff";
   ctx.fillRect(0, 0, c.width, c.height);
-  ctx.fillStyle = "#000000";
+  ctx.fillStyle = "#000";
   ctx.font = "22px Arial";
   wrapText(ctx, currentQuote, 40, 200, 420, 30);
 }
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-  let words = text.split(" ");
+  const words = text.split(" ");
   let line = "";
-  for (let n = 0; n < words.length; n++) {
-    let testLine = line + words[n] + " ";
-    let metrics = ctx.measureText(testLine);
-    let testWidth = metrics.width;
-    if (testWidth > maxWidth && n > 0) {
+  for (let word of words) {
+    const test = line + word + " ";
+    if (ctx.measureText(test).width > maxWidth) {
       ctx.fillText(line, x, y);
-      line = words[n] + " ";
+      line = word + " ";
       y += lineHeight;
     } else {
-      line = testLine;
+      line = test;
     }
   }
   ctx.fillText(line, x, y);
 }
 
 function downloadImage() {
-  let c = document.getElementById("canvas");
-  let link = document.createElement("a");
+  const c = document.getElementById("canvas");
+  const link = document.createElement("a");
   link.download = "quote-design.png";
   link.href = c.toDataURL();
   link.click();
 }
-</script>let currentQuote = "";
-
-function gen(type) {
-  let arr = quotes[type];
-  currentQuote = arr[Math.floor(Math.random() * arr.length)];
-  document.getElementById("quote").innerText = currentQuote;
-}
-
-function copyQuote() {
-  if (!currentQuote) return alert("Generate a quote first!");
-  navigator.clipboard.writeText(currentQuote);
-  alert("Copied!");
-}
-
-function drawImage() {
-  if (!currentQuote) return alert("Generate a quote first!");
-  let c = document.getElementById("canvas");
-  let ctx = c.getContext("2d");
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, c.width, c.height);
-  ctx.fillStyle = "#000000";
-  ctx.font = "22px Arial";
-  wrapText(ctx, currentQuote, 40, 200, 420, 30);
-}
-
-function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-  let words = text.split(" ");
-  let line = "";
-  for (let n = 0; n < words.length; n++) {
-    let testLine = line + words[n] + " ";
-    let metrics = ctx.measureText(testLine);
-    let testWidth = metrics.width;
-    if (testWidth > maxWidth && n > 0) {
-      ctx.fillText(line, x, y);
-      line = words[n] + " ";
-      y += lineHeight;
-    } else {
-      line = testLine;
-    }
-  }
-  ctx.fillText(line, x, y);
-}
-
-function downloadImage() {
-  let c = document.getElementById("canvas");
-  let link = document.createElement("a");
-  link.download = "quote-design.png";
-  link.href = c.toDataURL();
-  link.click();
-}
+</script>
 
 </body>
 </html>
