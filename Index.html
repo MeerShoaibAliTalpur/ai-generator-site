@@ -54,7 +54,7 @@ canvas {
   background: white;
   border-radius: 12px;
   padding: 10px;
-}
+}<canvas id="canvas" width="500" height="500"></canvas>
 </style>
 </head>
 <body>
@@ -69,7 +69,9 @@ canvas {
     <button onclick="gen('life')">Life</button>
     <button onclick="gen('success')">Success</button>
     <button onclick="gen('urdu')">Urdu</button>
-  </div>
+  </div> <button onclick="gen('funny')">Funny</button>
+<button onclick="gen('business')">Business</button>
+<button onclick="gen('friendship')">Friendship</button>
 
   <div id="quote">Click a category 👆</div>
   <button class="action-btn" onclick="copyQuote()">Copy Text</button>
@@ -106,6 +108,24 @@ const quotes = {
     "جو صبر کرتا ہے وہی جیتتا ہے۔",
     "حوصلہ ہی کامیابی کی پہچان ہے۔"
   ]
+{funny: [
+  "Laughter is free therapy.",
+  "Life is too short for boring quotes.",
+  "Smile today, not tomorrow.",
+  "Funny quotes make your day!"
+],
+business: [
+  "Value creates revenue.",
+  "Plan, execute, succeed.",
+  "Work smarter, not harder.",
+  "Business is patience + action."
+],
+friendship: [
+  "Friends are the family we choose.",
+  "A true friend is a treasure.",
+  "Good friends make life beautiful."}
+]
+
 };
 
 let currentQuote = "";
@@ -158,7 +178,56 @@ function downloadImage() {
   link.href = c.toDataURL();
   link.click();
 }
-</script>
+</script>let currentQuote = "";
+
+function gen(type) {
+  let arr = quotes[type];
+  currentQuote = arr[Math.floor(Math.random() * arr.length)];
+  document.getElementById("quote").innerText = currentQuote;
+}
+
+function copyQuote() {
+  if (!currentQuote) return alert("Generate a quote first!");
+  navigator.clipboard.writeText(currentQuote);
+  alert("Copied!");
+}
+
+function drawImage() {
+  if (!currentQuote) return alert("Generate a quote first!");
+  let c = document.getElementById("canvas");
+  let ctx = c.getContext("2d");
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, c.width, c.height);
+  ctx.fillStyle = "#000000";
+  ctx.font = "22px Arial";
+  wrapText(ctx, currentQuote, 40, 200, 420, 30);
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  let words = text.split(" ");
+  let line = "";
+  for (let n = 0; n < words.length; n++) {
+    let testLine = line + words[n] + " ";
+    let metrics = ctx.measureText(testLine);
+    let testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      ctx.fillText(line, x, y);
+      line = words[n] + " ";
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line, x, y);
+}
+
+function downloadImage() {
+  let c = document.getElementById("canvas");
+  let link = document.createElement("a");
+  link.download = "quote-design.png";
+  link.href = c.toDataURL();
+  link.click();
+}
 
 </body>
 </html>
